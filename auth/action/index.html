@@ -25,13 +25,36 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+        .new-password-form {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        .new-password-form input {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .new-password-form button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #0d1117;
+            color: #fff;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="message" id="message"></div>
+    <form class="new-password-form" id="new-password-form">
+        <input type="password" id="new-password" placeholder="Enter new password" required />
+        <button type="submit">Set New Password</button>
+    </form>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-        import { getAuth, applyActionCode, verifyPasswordResetCode } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+        import { getAuth, applyActionCode, verifyPasswordResetCode, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCcgznpsTDK4aMzmMlvjY0cLpBuP7OPFKE",
@@ -53,6 +76,7 @@
         const lang = urlParams.get('lang');
 
         const messageDiv = document.getElementById('message');
+        const newPasswordForm = document.getElementById('new-password-form');
 
         if (mode === 'verifyEmail') {
             applyActionCode(auth, oobCode)
@@ -66,6 +90,19 @@
             verifyPasswordResetCode(auth, oobCode)
                 .then((email) => {
                     messageDiv.textContent = 'Password reset link verified. You can now set a new password.';
+                    newPasswordForm.style.display = 'flex';
+                    newPasswordForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        const newPassword = document.getElementById('new-password').value;
+                        confirmPasswordReset(auth, oobCode, newPassword)
+                            .then(() => {
+                                messageDiv.textContent = 'Password has been successfully reset. You can now log in with your new password.';
+                                newPasswordForm.style.display = 'none';
+                            })
+                            .catch((error) => {
+                                messageDiv.textContent = `Error resetting password: ${error.message}`;
+                            });
+                    });
                 })
                 .catch((error) => {
                     messageDiv.textContent = `Error verifying password reset code: ${error.message}`;
