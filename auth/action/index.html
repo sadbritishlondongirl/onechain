@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Action Handler - OneChain Hosting</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
@@ -17,41 +19,112 @@
             justify-content: center;
             height: 100vh;
             overflow: hidden;
+            position: relative;
         }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 0;
+        }
+
+        .form-container {
+            max-width: 500px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1;
+        }
+
         .message {
-            background: #fff;
-            color: #333;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
         }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
         .new-password-form {
             display: none;
             flex-direction: column;
             align-items: center;
         }
-        .new-password-form input {
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1rem;
+            text-align: center;
+            transition: color 0.3s;
         }
-        .new-password-form button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background: #0d1117;
-            color: #fff;
-            cursor: pointer;
+
+        .back-link:hover {
+            color: #58a6ff;
         }
     </style>
 </head>
 <body>
-    <div class="message" id="message"></div>
-    <form class="new-password-form" id="new-password-form">
-        <input type="password" id="new-password" placeholder="Enter new password" required />
-        <button type="submit">Set New Password</button>
-    </form>
+    <div id="particles-js" class="particles"></div>
+    <div class="overlay"></div>
+    <div class="form-container">
+        <div class="message" id="message"></div>
+        <form class="new-password-form" id="new-password-form">
+            <input type="password" id="new-password" placeholder="Enter new password" required />
+            <button type="submit">Set New Password</button>
+        </form>
+        <a href="/" class="back-link">Back to Home</a>
+    </div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
         import { getAuth, applyActionCode, verifyPasswordResetCode, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
@@ -81,7 +154,10 @@
         if (mode === 'verifyEmail') {
             applyActionCode(auth, oobCode)
                 .then(() => {
-                    messageDiv.textContent = 'Email successfully verified! You can now log in.';
+                    messageDiv.textContent = 'Email successfully verified! Redirecting to login...';
+                    setTimeout(() => {
+                        window.location.href = "/login";
+                    }, 2000);
                 })
                 .catch((error) => {
                     messageDiv.textContent = `Error verifying email: ${error.message}`;
@@ -96,8 +172,11 @@
                         const newPassword = document.getElementById('new-password').value;
                         confirmPasswordReset(auth, oobCode, newPassword)
                             .then(() => {
-                                messageDiv.textContent = 'Password has been successfully reset. You can now log in with your new password.';
+                                messageDiv.textContent = 'Password has been successfully reset. Redirecting to login...';
                                 newPasswordForm.style.display = 'none';
+                                setTimeout(() => {
+                                    window.location.href = "/login";
+                                }, 2000);
                             })
                             .catch((error) => {
                                 messageDiv.textContent = `Error resetting password: ${error.message}`;
@@ -108,6 +187,95 @@
                     messageDiv.textContent = `Error verifying password reset code: ${error.message}`;
                 });
         }
+    </script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 120,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    },
+                    "opacity": {
+                        "value": 0.8,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 6,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": false,
+                            "mode": "repulse"
+                        },
+                        "onclick": {
+                            "enable": false,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    }
+                },
+                "retina_detect": true
+            },
+            "config_demo": {
+                "hide_card": false,
+                "background_color": "#0d1117",
+                "background_image": "",
+                "background_position": "50% 50%",
+                "background_repeat": "no-repeat",
+                "background_size": "cover"
+            }
+        });
     </script>
 </body>
 </html>
