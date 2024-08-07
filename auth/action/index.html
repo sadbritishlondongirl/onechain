@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Handler - OneChain Hosting</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .message {
+            background: #fff;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="message" id="message"></div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAuth, applyActionCode, verifyPasswordResetCode } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCcgznpsTDK4aMzmMlvjY0cLpBuP7OPFKE",
+            authDomain: "onechain-7c063.firebaseapp.com",
+            projectId: "onechain-7c063",
+            storageBucket: "onechain-7c063.appspot.com",
+            messagingSenderId: "113997708585",
+            appId: "1:113997708585:web:521b8c024664f7f26dcb38",
+            measurementId: "G-Y676JKYMZ8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+        const oobCode = urlParams.get('oobCode');
+        const apiKey = urlParams.get('apiKey');
+        const lang = urlParams.get('lang');
+
+        const messageDiv = document.getElementById('message');
+
+        if (mode === 'verifyEmail') {
+            applyActionCode(auth, oobCode)
+                .then(() => {
+                    messageDiv.textContent = 'Email successfully verified! You can now log in.';
+                })
+                .catch((error) => {
+                    messageDiv.textContent = `Error verifying email: ${error.message}`;
+                });
+        } else if (mode === 'resetPassword') {
+            verifyPasswordResetCode(auth, oobCode)
+                .then((email) => {
+                    messageDiv.textContent = 'Password reset link verified. You can now set a new password.';
+                })
+                .catch((error) => {
+                    messageDiv.textContent = `Error verifying password reset code: ${error.message}`;
+                });
+        }
+    </script>
+</body>
+</html>
