@@ -89,7 +89,7 @@
             transform: translateY(-2px);
         }
 
-        .back-link {
+        .back-link, .reset-link {
             display: block;
             margin-top: 20px;
             color: #ffffff;
@@ -99,7 +99,7 @@
             transition: color 0.3s;
         }
 
-        .back-link:hover {
+        .back-link:hover, .reset-link:hover {
             color: #58a6ff;
         }
 
@@ -151,6 +151,7 @@
             <button type="submit">Login</button>
         </form>
         <a href="index.html" class="back-link">Back to Home</a>
+        <a href="#" class="reset-link" id="reset-password-link">Forgot Password?</a>
     </div>
 
     <div id="notification-modal" class="modal">
@@ -163,7 +164,7 @@
     <script type="module">
         // Import Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
 
         // Firebase configuration
@@ -202,6 +203,25 @@
                 })
                 .catch((error) => {
                     console.error('Error logging in:', error);
+                    handleFirebaseError(error.code);
+                });
+        });
+
+        // Reset Password handling
+        const resetPasswordLink = document.getElementById('reset-password-link');
+        resetPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            if (!email) {
+                showModal('Please enter your email address first.');
+                return;
+            }
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    showModal('Password reset email sent. Check your inbox.');
+                })
+                .catch((error) => {
+                    console.error('Error sending password reset email:', error);
                     handleFirebaseError(error.code);
                 });
         });
