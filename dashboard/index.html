@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneChain Hosting</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 0;
+        }
+
+        .content {
+            text-align: center;
+            max-width: 600px;
+            animation: fadeInUp 1s ease-in-out;
+            z-index: 1;
+        }
+
+        .content h2 {
+            font-size: 2rem;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #0d1117;
+            transform: translateY(-5px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .section {
+            max-width: 800px;
+            margin-top: 40px;
+            text-align: left;
+            z-index: 1;
+        }
+
+        .plans {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .plan {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            text-align: left;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            width: 250px;
+        }
+
+        .plan:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .plan h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .plan p {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #c9d1d9;
+        }
+
+        .pay-section {
+            max-width: 600px;
+        }
+
+        .pay-section label {
+            display: block;
+            margin-top: 10px;
+            color: #ffffff;
+        }
+
+        .pay-section select,
+        .pay-section input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .pay-section button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 20px 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .pay-section button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #0d1117;
+            transform: translateY(-5px);
+        }
+
+        .dashboard h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .dashboard ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .dashboard li {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            color: #ffffff;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            background-color: transparent;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #0d1117;
+            transform: translateY(-5px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js" class="particles"></div>
+    <div class="overlay"></div>
+    <div class="content" id="welcome-content">
+        <h2 id="welcome-title">Welcome</h2>
+        <p id="welcome-description">Fetching user data...</p>
+        <div class="buttons">
+            <button class="btn" onclick="showSection('plans')">Choose a Plan</button>
+            <button class="btn" onclick="showSection('dashboard')">Dashboard</button>
+        </div>
+    </div>
+    <div id="plans" class="section hidden">
+        <h2>Choose Your Plan</h2>
+        <div class="plans">
+            <div class="plan">
+                <h3>Basic Plan</h3>
+                <p>$10/month</p>
+                <p>Includes basic hosting features for Node.js and Python scripts.</p>
+                <button class="btn" onclick="selectPlan('Basic Plan', 10)">Select</button>
+            </div>
+            <div class="plan">
+                <h3>Pro Plan</h3>
+                <p>$20/month</p>
+                <p>Enhanced features with increased storage and bandwidth.</p>
+                <button class="btn" onclick="selectPlan('Pro Plan', 20)">Select</button>
+            </div>
+            <div class="plan">
+                <h3>Enterprise Plan</h3>
+                <p>$50/month</p>
+                <p>Full access to all features, priority support, and custom options.</p>
+                <button class="btn" onclick="selectPlan('Enterprise Plan', 50)">Select</button>
+            </div>
+        </div>
+        <button class="btn back-btn" onclick="goToMainMenu()">Back</button>
+    </div>
+    <div id="payment" class="section hidden">
+        <h2>Make a Payment</h2>
+        <div class="pay-section">
+            <p id="payment-details"></p>
+            <label for="crypto">Choose Cryptocurrency:</label>
+            <select id="crypto" onchange="calculateAmount()">
+                <option value="solana">Solana</option>
+                <option value="ton">TON</option>
+                <option value="trx">TRX</option>
+                <option value="xrp">XRP</option>
+                <option value="usdt_trc20">USDT TRC20</option>
+                <option value="usdt_erc20">USDT ERC20</option>
+                <option value="usdt_ton">USDT TON</option>
+            </select>
+            <label for="amount">Amount:</label>
+            <input type="text" id="amount" readonly>
+            <label for="unique-comment">Unique Comment:</label>
+            <input type="text" id="unique-comment" readonly>
+            <label for="address">Payment Address:</label>
+            <input type="text" id="address" readonly value="Generated address based on selected crypto">
+            <button class="btn" onclick="confirmPayment()">Confirm Payment</button>
+        </div>
+        <button class="btn back-btn" onclick="goToPlans()">Back</button>
+    </div>
+    <div id="dashboard" class="section hidden">
+        <h2>Your Dashboard</h2>
+        <div class="dashboard">
+            <h3>My Plans:</h3>
+            <ul id="plans-list">
+                <!-- Plan items will be dynamically added here -->
+            </ul>
+        </div>
+        <button class="btn back-btn" onclick="goToMainMenu()">Back</button>
+    </div>
+    
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCcgznpsTDK4aMzmMlvjY0cLpBuP7OPFKE",
+            authDomain: "onechain-7c063.firebaseapp.com",
+            projectId: "onechain-7c063",
+            storageBucket: "onechain-7c063.appspot.com",
+            messagingSenderId: "113997708585",
+            appId: "1:113997708585:web:521b8c024664f7f26dcb38",
+            measurementId: "G-Y676JKYMZ8"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        let user;
+
+        auth.onAuthStateChanged(currentUser => {
+            if (currentUser) {
+                user = {
+                    email: currentUser.email,
+                    uid: currentUser.uid,
+                    plans: []
+                };
+                document.getElementById('welcome-title').textContent = `Welcome, ${user.email}`;
+                fetchUserData(currentUser);
+            } else {
+                window.location.href = '/login';
+            }
+        });
+
+        function fetchUserData(currentUser) {
+            const userDoc = db.collection('users').doc(currentUser.uid);
+            userDoc.get().then(doc => {
+                if (doc.exists) {
+                    const userData = doc.data();
+                    user.balance = userData.balance;
+                    document.getElementById('welcome-description').textContent = `Balance: ${user.balance}`;
+                } else {
+                    console.log("No such document!");
+                    // Create a new user document with balance 0 if it doesn't exist
+                    userDoc.set({
+                        balance: 0,
+                        email: currentUser.email
+                    }).then(() => {
+                        user.balance = 0;
+                        document.getElementById('welcome-description').textContent = `Balance: 0`;
+                    });
+                }
+            }).catch(error => {
+                console.log("Error getting document:", error);
+            });
+        }
+
+        function showSection(section) {
+            document.getElementById('welcome-content').classList.add('hidden');
+            document.getElementById('plans').classList.add('hidden');
+            document.getElementById('payment').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById(section).classList.remove('hidden');
+        }
+
+        function selectPlan(planName, planPrice) {
+            user.selectedPlan = {
+                name: planName,
+                price: planPrice
+            };
+            document.getElementById('payment-details').textContent = `You have selected the ${planName} plan for $${planPrice}/month.`;
+            showSection('payment');
+        }
+
+        function calculateAmount() {
+            const crypto = document.getElementById('crypto').value;
+            const amountElement = document.getElementById('amount');
+            const commentElement = document.getElementById('unique-comment');
+            const addressElement = document.getElementById('address');
+
+            let amount;
+            let comment;
+            let address;
+
+            switch (crypto) {
+                case 'solana':
+                    amount = user.selectedPlan.price * 0.01; // Example conversion rate
+                    comment = 'SOL-' + Math.random().toString(36).substring(7);
+                    address = '8JoS3xnshQDTcgnrX8erg9oPsBEGZit8rnn5FDjZdCr9';
+                    break;
+                case 'ton':
+                    amount = user.selectedPlan.price * 0.05;
+                    comment = 'TON-' + Math.random().toString(36).substring(7);
+                    address = 'UQD2YStScN0lFzXV-W7cePxcgUOxSdNbdJpuUZU_-DGk-uxW';
+                    break;
+                case 'trx':
+                    amount = user.selectedPlan.price * 0.2;
+                    comment = 'TRX-' + Math.random().toString(36).substring(7);
+                    address = 'TCoekDLMKWQ3es8dxmH3xXTURkvy54CKns';
+                    break;
+                case 'xrp':
+                    amount = user.selectedPlan.price * 0.5;
+                    comment = 'XRP-' + Math.random().toString(36).substring(7);
+                    address = 'rhpNqCTUvCPw6UmcKiW6R4kLamSrwGJubR';
+                    break;
+                case 'usdt_trc20':
+                    amount = user.selectedPlan.price;
+                    comment = 'USDT-TRC20-' + Math.random().toString(36).substring(7);
+                    address = 'TCoekDLMKWQ3es8dxmH3xXTURkvy54CKns';
+                    break;
+                case 'usdt_erc20':
+                    amount = user.selectedPlan.price;
+                    comment = 'USDT-ERC20-' + Math.random().toString(36).substring(7);
+                    address = '0x38951C87a3ac35a9Bf8850DBD0f75062036ff443';
+                    break;
+                case 'usdt_ton':
+                    amount = user.selectedPlan.price;
+                    comment = 'USDT-TON-' + Math.random().toString(36).substring(7);
+                    address = 'UQD2YStScN0lFzXV-W7cePxcgUOxSdNbdJpuUZU_-DGk-uxW';
+                    break;
+            }
+
+            amountElement.value = amount;
+            commentElement.value = comment;
+            addressElement.value = address;
+        }
+
+        function confirmPayment() {
+            const selectedPlan = user.selectedPlan.name;
+            const crypto = document.getElementById('crypto').value;
+            const amount = document.getElementById('amount').value;
+            const comment = document.getElementById('unique-comment').value;
+            const address = document.getElementById('address').value;
+
+            alert(`Please make a payment of ${amount} ${crypto.toUpperCase()} to the address ${address} with the unique comment ${comment}. Once the payment is confirmed, your plan will be activated.`);
+
+            // Placeholder for actual payment confirmation logic
+            setTimeout(() => {
+                alert('Payment confirmed! Your plan is now active.');
+                user.plans.push({ name: selectedPlan, crypto, amount });
+                updateDashboard();
+                showSection('dashboard');
+            }, 3000);
+        }
+
+        function updateDashboard() {
+            const plansList = document.getElementById('plans-list');
+            plansList.innerHTML = '';
+            user.plans.forEach(plan => {
+                const planItem = document.createElement('li');
+                planItem.textContent = `${plan.name} - Paid with ${plan.crypto.toUpperCase()} (${plan.amount})`;
+                plansList.appendChild(planItem);
+            });
+        }
+
+        function goToMainMenu() {
+            showSection('welcome-content');
+        }
+
+        function goToPlans() {
+            showSection('plans');
+        }
+    </script>
+    <div id="particles-js" class="particles"></div>
+
+    <!-- Скрипты должны быть после основного HTML-кода -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Инициализация particles.js
+        particlesJS.load('particles-js', 'particles.json', function() {
+            console.log('particles.json loaded...');
+        });
+    </script>
+</body>
+</html>
