@@ -106,27 +106,31 @@
         <p>Your one-stop solution for Node.js and Python script hosting with secure cryptocurrency payments.</p>
         <p>Register now and enjoy flexible hosting plans, data encryption, and support for various cryptocurrencies.</p>
         <div class="buttons">
-            <a href="register.html" class="btn">Get Started</a>
-            <a href="login.html" class="btn">Login</a>
+            <a href="/register" class="btn">Get Started</a>
+            <a href="/login" class="btn">Login</a>
         </div>
     </div>
     <script type="module">
         // Firebase Initialization
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "API_KEY",
+            apiKey: "AIzaSyCcgznpsTDK4aMzmMlvjY0cLpBuP7OPFKE",
             authDomain: "onechain-7c063.firebaseapp.com",
             projectId: "onechain-7c063",
             storageBucket: "onechain-7c063.appspot.com",
-            messagingSenderId: "SENDER_ID",
-            appId: "APP_ID",
+            messagingSenderId: "113997708585",
+            appId: "1:113997708585:web:521b8c024664f7f26dcb38",
             measurementId: "G-Y676JKYMZ8"
         };
 
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
     <script>
