@@ -148,7 +148,7 @@
             margin-top: 5px;
             border-radius: 5px;
             border: 1px solid #ffffff;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: #1a1a1a;
             color: #ffffff;
             font-size: 1rem;
         }
@@ -217,9 +217,53 @@
                 transform: translateY(0);
             }
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            color: #fff;
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
     </style>
 </head>
 <body>
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <p id="modal-message"></p>
+        </div>
+    </div>
     <div id="particles-js" class="particles"></div>
     <div class="overlay"></div>
     <div class="content" id="welcome-content">
@@ -427,15 +471,28 @@
             const comment = document.getElementById('unique-comment').value;
             const address = document.getElementById('address').value;
 
-            alert(`Please make a payment of ${amount} ${crypto.toUpperCase()} to the address ${address} with the unique comment ${comment}. Once the payment is confirmed, your plan will be activated.`);
+            showModal(`Please make a payment of ${amount} ${crypto.toUpperCase()} to the address ${address} with the unique comment ${comment}. Once the payment is confirmed by admin, your plan will be activated.`);
 
-            // Placeholder for actual payment confirmation logic
-            setTimeout(() => {
-                alert('Payment confirmed! Your plan is now active.');
-                user.plans.push({ name: selectedPlan, crypto, amount });
-                updateDashboard();
-                showSection('dashboard');
-            }, 3000);
+            // Запись информации о платеже в Firestore
+            db.collection('payments').add({
+                userId: user.uid,
+                plan: selectedPlan,
+                crypto: crypto,
+                amount: amount,
+                comment: comment,
+                address: address,
+                confirmed: false // Флаг подтверждения администратором
+            });
+        }
+
+        function checkPaymentConfirmation() {
+            db.collection('payments').where('userId', '==', user.uid).where('confirmed', '==', true).get().then(snapshot => {
+                snapshot.forEach(doc => {
+                    const payment = doc.data();
+                    user.plans.push({ name: payment.plan, crypto: payment.crypto, amount: payment.amount });
+                    updateDashboard();
+                });
+            });
         }
 
         function updateDashboard() {
@@ -455,6 +512,16 @@
         function goToPlans() {
             showSection('plans');
         }
+
+        function showModal(message) {
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
     </script>
     <div id="particles-js" class="particles"></div>
 
