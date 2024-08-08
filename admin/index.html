@@ -244,20 +244,21 @@
         function loadPayments() {
             const paymentsTable = document.getElementById('payments-table').getElementsByTagName('tbody')[0];
             paymentsTable.innerHTML = '';
-            db.collection('payments').get().then(querySnapshot => {
+            // Query only unconfirmed payments
+            db.collection('payments').where('confirmed', '==', false).get().then(querySnapshot => {
                 querySnapshot.forEach(doc => {
                     const data = doc.data();
                     const row = paymentsTable.insertRow();
-                    row.insertCell(0).textContent = data.userEmail;
-                    row.insertCell(1).textContent = data.plan;
-                    row.insertCell(2).textContent = data.amount;
-                    row.insertCell(3).textContent = data.crypto;
-                    row.insertCell(4).textContent = data.comment;
+                    row.insertCell(0).textContent = data.userEmail || 'N/A';
+                    row.insertCell(1).textContent = data.plan || 'N/A';
+                    row.insertCell(2).textContent = data.amount || 'N/A';
+                    row.insertCell(3).textContent = data.crypto || 'N/A';
+                    row.insertCell(4).textContent = data.comment || 'N/A';
                     const actionCell = row.insertCell(5);
                     const confirmBtn = document.createElement('button');
                     confirmBtn.textContent = 'Confirm';
                     confirmBtn.className = 'btn';
-                    confirmBtn.onclick = () => confirmPayment(doc.id);
+                    confirmBtn.onclick = () => confirmPayment(doc.id, data.userId, data.plan);
                     actionCell.appendChild(confirmBtn);
                 });
             }).catch(error => {
@@ -272,23 +273,32 @@
                 querySnapshot.forEach(doc => {
                     const data = doc.data();
                     const row = usersTable.insertRow();
-                    row.insertCell(0).textContent = data.email;
-                    row.insertCell(1).textContent = data.balance;
-                    row.insertCell(2).textContent = data.plans.join(', ');
+                    row.insertCell(0).textContent = data.email || 'N/A'; // Safeguard in case of missing fields
+                    row.insertCell(1).textContent = data.balance || '0';
+                    row.insertCell(2).textContent = Array.isArray(data.plans) ? data.plans.join(', ') : 'None';
                 });
             }).catch(error => {
                 console.error("Error loading users:", error);
             });
         }
 
-        function confirmPayment(paymentId) {
-            db.collection('payments').doc(paymentId).update({
+        function confirmPayment(paymentId, userId, plan) {
+            const userRef = db.collection('users').doc(userId);
+            const paymentRef = db.collection('payments').doc(paymentId);
+
+            // Confirm the payment
+            paymentRef.update({
                 confirmed: true
             }).then(() => {
-                alert('Payment confirmed');
+                // Update the user's plans
+                return userRef.update({
+                    plans: firebase.firestore.FieldValue.arrayUnion(plan)
+                });
+            }).then(() => {
+                alert('Payment confirmed and plan updated for the user.');
                 loadPayments();
             }).catch(error => {
-                console.error("Error confirming payment:", error);
+                console.error("Error confirming payment and updating user plan:", error);
             });
         }
 
