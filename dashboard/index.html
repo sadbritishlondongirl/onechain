@@ -254,6 +254,12 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
         
     </style>
 </head>
@@ -377,15 +383,19 @@
                 if (doc.exists) {
                     const userData = doc.data();
                     user.balance = userData.balance;
+                    user.plans = userData.plans || [];
                     document.getElementById('welcome-description').textContent = `Balance: ${user.balance}`;
+                    updateDashboard();
                 } else {
                     console.log("No such document!");
-                    // Create a new user document with balance 0 if it doesn't exist
+                    // Create a new user document with balance 0 and an empty plans array if it doesn't exist
                     userDoc.set({
                         balance: 0,
-                        email: currentUser.email
+                        email: currentUser.email,
+                        plans: []
                     }).then(() => {
                         user.balance = 0;
+                        user.plans = [];
                         document.getElementById('welcome-description').textContent = `Balance: 0`;
                     });
                 }
@@ -478,10 +488,10 @@
                 userId: user.uid,
                 plan: selectedPlan,
                 crypto: crypto,
-                amount: amount,
-                comment: comment,
-                address: address,
-                confirmed: false // Флаг подтверждения администратором
+                amount: Number(amount), // ensure it's a number
+                comment: String(comment), // ensure it's a string
+                address: String(address), // ensure it's a string
+                confirmed: false // ensure it's a boolean
             });
         }
 
@@ -500,7 +510,24 @@
             plansList.innerHTML = '';
             user.plans.forEach(plan => {
                 const planItem = document.createElement('li');
-                planItem.textContent = `${plan.name} - Paid with ${plan.crypto.toUpperCase()} (${plan.amount})`;
+
+                if (typeof plan === 'string') {
+                    planItem.textContent = plan;
+                } else if (typeof plan === 'object' && plan !== null && typeof plan.name === 'string' && typeof plan.crypto === 'string' && typeof plan.amount === 'number') {
+                    planItem.textContent = `${plan.name} - Paid with ${plan.crypto.toUpperCase()} (${plan.amount})`;
+                } else {
+                    console.error('Invalid plan format:', plan);
+                    return;
+                }
+
+                const useServerButton = document.createElement('button');
+                useServerButton.className = 'btn btn-small';
+                useServerButton.textContent = 'Use Server';
+                useServerButton.onclick = () => {
+                    window.location.href = '/server';
+                };
+
+                planItem.appendChild(useServerButton);
                 plansList.appendChild(planItem);
             });
         }
