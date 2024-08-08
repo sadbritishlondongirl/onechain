@@ -471,7 +471,7 @@
             const comment = document.getElementById('unique-comment').value;
             const address = document.getElementById('address').value;
 
-            showModal(`Please make a payment of ${amount} ${crypto.toUpperCase()} to the address ${address} with the unique comment ${comment}. Once the payment is confirmed by admin, your plan will be activated.`);
+            showModal(`Please make a payment of ${amount} ${crypto.toUpperCase()} to the address ${address} with the unique comment ${comment}. Once the payment is confirmed, your plan will be activated.`);
 
             // Запись информации о платеже в Firestore
             db.collection('payments').add({
