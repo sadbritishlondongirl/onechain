@@ -392,10 +392,8 @@
                     userDoc.set({
                         balance: 0,
                         email: currentUser.email,
-                        plans: []
                     }).then(() => {
                         user.balance = 0;
-                        user.plans = [];
                         document.getElementById('welcome-description').textContent = `Balance: 0`;
                     });
                 }
