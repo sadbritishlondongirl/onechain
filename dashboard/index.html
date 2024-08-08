@@ -193,12 +193,17 @@
         }
 
         .back-btn {
-            margin-top: 20px;
+            display: block;
+            margin: 20px auto; /* Центрируем кнопку */
+            padding: 10px 20px;
             background-color: transparent;
             border: 2px solid #ffffff;
             color: #ffffff;
             cursor: pointer;
             transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            font-size: 16px; /* Устанавливаем размер шрифта */
+            text-align: center; /* Центрируем текст */
+            border-radius: 5px; /* Добавляем закругление углов */
         }
 
         .back-btn:hover {
@@ -259,6 +264,44 @@
             padding: 5px 10px;
             font-size: 12px;
             margin-left: 10px;
+        }
+
+        .copy-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .copy-container input {
+            flex: 1;
+            margin-right: 8px; /* Уменьшенное расстояние между полем ввода и кнопкой */
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .copy-container .copy-btn {
+            width: 20px; /* Уменьшенная ширина кнопки */
+            height: 20px; /* Уменьшенная высота кнопки */
+            background-color: transparent;
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            font-size: 10px; /* Уменьшенный размер шрифта */
+            border-radius: 50%; /* Круглая кнопка */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .copy-container .copy-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #0d1117;
+        }
+
+        .copy-container input, .copy-container .copy-btn {
+            box-sizing: border-box;
         }
         
     </style>
@@ -321,9 +364,15 @@
             <label for="amount">Amount:</label>
             <input type="text" id="amount" readonly>
             <label for="unique-comment">Unique Comment:</label>
+            <div class="copy-container">
             <input type="text" id="unique-comment" readonly>
+            <button class="copy-btn" onclick="copyToClipboard('unique-comment')">C</button>
+                </div>
             <label for="address">Payment Address:</label>
+            <div class="copy-container">
             <input type="text" id="address" readonly value="Generated address based on selected crypto">
+            <button class="copy-btn" onclick="copyToClipboard('address')">C</button>
+                </div>
             <button class="btn" onclick="confirmPayment()">Confirm Payment</button>
         </div>
         <button class="btn back-btn" onclick="goToPlans()">Back</button>
@@ -536,6 +585,13 @@
 
         function goToPlans() {
             showSection('plans');
+        }
+
+        function copyToClipboard(elementId) {
+            const input = document.getElementById(elementId);
+            input.select();
+            document.execCommand('copy');
+            showModal(`Copied ${elementId.replace('-', ' ')} to clipboard!`);
         }
 
         function showModal(message) {
